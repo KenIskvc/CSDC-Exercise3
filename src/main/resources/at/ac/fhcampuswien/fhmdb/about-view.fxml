@@ -25,7 +25,6 @@
         </padding>
         <children>
             <JFXButton fx:id="homeBtn" text="Home" onAction="#switchToHome" style="-fx-background-color: #f5c518;" />
-            <JFXButton fx:id="watchlistBtn" text="Watchlist" onAction="#switchToWatchlist" style="-fx-background-color: #f5c518;" />
             <JFXButton fx:id="aboutBtn" text="About" onAction="#switchToAbout" style="-fx-background-color: #f5c518;" />
         </children>
     </HBox>

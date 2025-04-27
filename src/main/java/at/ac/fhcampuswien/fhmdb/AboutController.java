@@ -22,11 +22,11 @@ public class AboutController implements Initializable {
         SceneManager.switchScene((Node) event.getSource(), "home-view.fxml", ViewMode.HOME);
     }
 
-    @FXML
+    /*@FXML
     public void switchToWatchlist(ActionEvent event) {
         SceneManager.switchScene((Node) event.getSource(), "home-view.fxml", ViewMode.WATCHLIST);
     }
-
+*/
 
     @FXML
     public void switchToAbout(ActionEvent event) {
