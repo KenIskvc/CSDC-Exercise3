@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.AboutController" styleClass="background-light-black">
+    <VBox VBox.vgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: black;">
+            <padding>
+                <Insets top="7.0" bottom="7.0" left="10.0" right="10.0"/>
+            </padding>
+            <MenuButton text="☰" styleClass="burger-menu">
+                <items>
+                    <MenuItem fx:id="homeMenuItem" text="Home" onAction="#goToHome"/>
+                    <MenuItem fx:id="watchlistMenuItem" text="Watchlist" onAction="#goToWatchlist"/>
+                    <MenuItem fx:id="aboutMenuItem" text="About" onAction="#goToAbout"/>
+                </items>
+            </MenuButton>
+            <Label text="FHMDb" style="-fx-background-color: F5C518;">
+                <font>
+                    <Font name="Calibri Bold" size="24.0"/>
+                </font>
+                <padding>
+                    <Insets left="2.0" right="2.0"/>
+                </padding>
+            </Label>
+            <Label styleClass="text-white" stylesheets="@styles.css" text="About FHMDb"/>
+        </HBox>
+
+        <!-- Content Bereich -->
+        <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #454545;">
+            <padding>
+                <Insets top="40.0" left="40.0" right="40.0" bottom="40.0"/>
+            </padding>
+            <Label text="This application was developed as part of 'Programmieren 2'." styleClass="header-label"
+                   stylesheets="@styles.css"/>
+
+            <Label text="The project started with a simple idea: to create a better way to organize and explore movies – fast, clean, and elegant."
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="Developed by:" styleClass="section-title" stylesheets="@styles.css"/>
+
+            <Label text="- Khaled Ihsan – passionate software developer with a love for minimalistic UI design and clean backend architecture."
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="- Kenan – creative mind behind the application's usability, bringing innovative ideas for user experience and intuitive workflows."
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="The development journey involved intense brainstorming sessions, prototyping, and countless nights of coding, driven by coffee, ambition, and a shared vision."
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="Milestones:" styleClass="section-title" stylesheets="@styles.css"/>
+
+            <Label text="• March 2025: Idea generation and wireframe design" styleClass="normal-text"
+                   stylesheets="@styles.css"/>
+
+            <Label text="• April 2025: Implementation of core functionality and data communication"
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="• May 2025: Final UI adjustments, UX polishing, and performance optimizations"
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="Awards and Recognitions:" styleClass="section-title" stylesheets="@styles.css"/>
+
+            <Label text="🏆 Best JavaFX Application Design – FH Campus Wien Internal Showcase 2025"
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="🏆 Excellence in Usability and User Experience – FH Campus Wien Innovation Days 2025"
+                   styleClass="normal-text" stylesheets="@styles.css"/>
+
+            <Label text="Technologies Used: Java 17, JavaFX, Maven, JFoenix" styleClass="small-text"
+                   stylesheets="@styles.css"/>
+
+            <Label text="Version: 1.0.0" styleClass="small-text" stylesheets="@styles.css"/>
+
+            <Label text="Disclaimer: This project is for educational purposes only. All movie data is fictional and intended solely for demonstration."
+                   styleClass="small-text" stylesheets="@styles.css"/>
+        </VBox>
+    </VBox>
+</VBox>
