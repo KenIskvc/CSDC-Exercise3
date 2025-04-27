@@ -12,8 +12,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.*;
@@ -45,8 +48,10 @@ public class HomeController implements Initializable {
     public List<Movie> allMovies;
 
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
+    private final List<Movie> watchlistMovies = new ArrayList<>();
 
     protected SortedState sortedState;
+    private ViewMode currentViewMode= ViewMode.HOME;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,10 +60,15 @@ public class HomeController implements Initializable {
     }
 
     public void initializeState() {
-        List<Movie> result = MovieAPI.getAllMovies();
-        setMovies(result);
-        setMovieList(result);
+        if (currentViewMode == ViewMode.WATCHLIST) {
+            setMovieList(watchlistMovies);
+        } else {
+            List<Movie> result = MovieAPI.getAllMovies();
+            setMovies(result);
+            setMovieList(result);
+        }
         sortedState = SortedState.NONE;
+
 
         // test stream methods
         System.out.println("getMostPopularActor");
@@ -81,7 +91,8 @@ public class HomeController implements Initializable {
 
     public void initializeLayout() {
         movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
+        movieListView.setCellFactory(movieListView -> new MovieCell(currentViewMode, this
+        )); // apply custom cells to the listview
 
         // genre combobox
         Object[] genres = Genre.values();   // get all genres
@@ -243,4 +254,64 @@ public class HomeController implements Initializable {
                 .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
                 .collect(Collectors.toList());
     }
+    @FXML
+    public void switchToHome() {
+        try {
+            currentViewMode = ViewMode.HOME;
+            setMovieList(allMovies);
+            movieListView.setCellFactory(movieListView -> new MovieCell(currentViewMode, this));
+        } catch (Exception e) {
+            showError("Fehler beim Wechsel auf Home-Screen: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void switchToWatchlist() {
+        try {
+            currentViewMode = ViewMode.WATCHLIST;
+            setMovieList(watchlistMovies);
+            movieListView.setCellFactory(movieListView -> new MovieCell(currentViewMode, this));
+        } catch (Exception e) {
+            showError("Fehler beim Wechsel auf Watchlist: " + e.getMessage());
+        }
+    }
+    public void addToWatchlist(Movie movie) {
+        if (!watchlistMovies.contains(movie)) {
+            watchlistMovies.add(movie);
+        }
+    }
+
+    public void removeFromWatchlist(Movie movie) {
+        watchlistMovies.remove(movie);
+        if (currentViewMode == ViewMode.WATCHLIST) {
+            setMovieList(watchlistMovies);
+        }
+    }
+
+
+
+    private void showError(String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle("Fehler");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    public void switchToAbout(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("about-view.fxml"));
+            Stage stage = (Stage) movieListView.getScene().getWindow();
+            Scene scene = new Scene(loader.load(), 890, 620);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            showError("Fehler beim Wechsel auf About-Seite: " + e.getMessage());
+        }
+    }
+    public void setViewMode(ViewMode viewMode) {
+        this.currentViewMode = viewMode;
+    }
+
+
+
+
+
 }

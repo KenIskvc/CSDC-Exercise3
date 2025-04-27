@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="at.ac.fhcampuswien.fhmdb.AboutController"
+      spacing="20" alignment="TOP_CENTER" style="-fx-background-color: #2b2b2b;">
+
+    <!-- Header wie Home -->
+    <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color: black;">
+        <padding>
+            <Insets top="10" bottom="10" left="10" right="10"/>
+        </padding>
+        <Label text="FHMDb" style="-fx-background-color: #f5c518; -fx-font-size: 24px; -fx-font-family: 'Calibri'; -fx-font-weight: bold;"/>
+        <Label text="Welcome to FHMDb!" style="-fx-text-fill: white;"/>
+    </HBox>
+    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #2b2b2b;">
+        <padding>
+            <Insets top="10" bottom="10" left="10" right="10"/>
+        </padding>
+        <children>
+            <JFXButton fx:id="homeBtn" text="Home" onAction="#switchToHome" style="-fx-background-color: #f5c518;" />
+            <JFXButton fx:id="watchlistBtn" text="Watchlist" onAction="#switchToWatchlist" style="-fx-background-color: #f5c518;" />
+            <JFXButton fx:id="aboutBtn" text="About" onAction="#switchToAbout" style="-fx-background-color: #f5c518;" />
+        </children>
+    </HBox>
+
+    <!-- Content Bereich -->
+    <VBox spacing="10" alignment="TOP_CENTER">
+        <Label text="About FHMDb" style="-fx-text-fill: #f5c518; -fx-font-size: 28px;"/>
+
+        <Text wrappingWidth="600" style="-fx-fill: white;">
+            FHMDb ist eine JavaFX-Anwendung, die Filme aus einer API anzeigt,
+            eine Watchlist verwaltet und auch offline funktioniert.
+            Dieses Projekt wurde im Rahmen des Studiums an der FH Campus Wien erstellt.
+        </Text>
+
+        <Text wrappingWidth="600" style="-fx-fill: white;">
+            Autoren:
+            - Max Mustermann
+            - Lisa Beispiel
+            - John Doe
+        </Text>
+    </VBox>
+
+</VBox>

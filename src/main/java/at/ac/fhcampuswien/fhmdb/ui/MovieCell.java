@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.HomeController;
+import at.ac.fhcampuswien.fhmdb.ViewMode;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.jfoenix.controls.JFXButton;
 import javafx.geometry.Insets;
@@ -12,16 +14,34 @@ import javafx.scene.paint.Color;
 
 import java.util.stream.Collectors;
 
+
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genre = new Label();
     private final JFXButton detailBtn = new JFXButton("Show Details");
+    private VBox detailsBox; // wird dynamisch erzeugt bei Show Details
+    private final ViewMode viewMode;
+    private final JFXButton actionBtn= new JFXButton();
     private final VBox layout = new VBox(title, detail, genre, detailBtn);
     private boolean collapsedDetails = true;
 
-    public MovieCell() {
+    public MovieCell(ViewMode viewMode, HomeController controller) {
         super();
+        this.viewMode = viewMode;
+        // alter detailBtn bleibt wie bisher
+        // neuer actionBtn wird dynamisch angepasst
+        actionBtn.setStyle("-fx-background-color: #f5c518;");
+        layout.getChildren().add(actionBtn);
+
+        actionBtn.setOnMouseClicked(mouseEvent -> {
+            if (viewMode == ViewMode.HOME) {
+                controller.addToWatchlist(getItem());
+            } else if (viewMode == ViewMode.WATCHLIST) {
+                controller.removeFromWatchlist(getItem());
+            }
+        });
+
         // color scheme
         detailBtn.setStyle("-fx-background-color: #f5c518;");
         title.getStyleClass().add("text-yellow");
@@ -39,16 +59,18 @@ public class MovieCell extends ListCell<Movie> {
 
         detailBtn.setOnMouseClicked(mouseEvent -> {
             if (collapsedDetails) {
-                layout.getChildren().add(getDetails());
+                detailsBox = getDetails();
+                layout.getChildren().add(detailsBox);
                 collapsedDetails = false;
                 detailBtn.setText("Hide Details");
             } else {
-                layout.getChildren().remove(4);
+                layout.getChildren().remove(detailsBox);
                 collapsedDetails = true;
                 detailBtn.setText("Show Details");
             }
             setGraphic(layout);
         });
+
     }
 
     private VBox getDetails() {
@@ -100,8 +122,15 @@ public class MovieCell extends ListCell<Movie> {
 
             detail.setMaxWidth(this.getScene().getWidth() - 30);
 
+            if (viewMode == ViewMode.HOME) {
+                actionBtn.setText("Zur Watchlist hinzufügen");
+            } else {
+                actionBtn.setText("Aus Watchlist entfernen");
+            }
+
             setGraphic(layout);
         }
     }
+
 }
 
