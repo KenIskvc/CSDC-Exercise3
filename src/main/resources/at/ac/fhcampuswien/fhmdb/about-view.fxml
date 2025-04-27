@@ -39,49 +39,18 @@
             <padding>
                 <Insets top="40.0" left="40.0" right="40.0" bottom="40.0"/>
             </padding>
-            <Label text="This application was developed as part of 'Programmieren 2'." styleClass="header-label"
-                   stylesheets="@styles.css"/>
 
-            <Label text="The project started with a simple idea: to create a better way to organize and explore movies – fast, clean, and elegant."
-                   styleClass="normal-text" stylesheets="@styles.css"/>
+            <Label text="FHMDb entstand aus einer simplen Idee: Filme smarter entdecken und sammeln." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
-            <Label text="Developed by:" styleClass="section-title" stylesheets="@styles.css"/>
+            <Label text="In einer kleinen Gruppe bestehend aus Khaled Salama, Mohamed Ihsan Atay und Kenan Isakovic wuchs daraus ein Projekt," styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
-            <Label text="- Khaled Ihsan – passionate software developer with a love for minimalistic UI design and clean backend architecture."
-                   styleClass="normal-text" stylesheets="@styles.css"/>
+            <Label text="dass sich auf klare Strukturen, schnelles Arbeiten und ein aufgeräumtes Design konzentriert." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
-            <Label text="- Kenan – creative mind behind the application's usability, bringing innovative ideas for user experience and intuitive workflows."
-                   styleClass="normal-text" stylesheets="@styles.css"/>
+            <Label text="In intensiven Sessions wurden Ideen gesponnen, Funktionen entwickelt und alles in zahllosen Codezeilen zum Leben erweckt." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
-            <Label text="The development journey involved intense brainstorming sessions, prototyping, and countless nights of coding, driven by coffee, ambition, and a shared vision."
-                   styleClass="normal-text" stylesheets="@styles.css"/>
+            <Label text="Heute steht FHMDb als Synonym für Einfachheit, Stil und Effizienz." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
-            <Label text="Milestones:" styleClass="section-title" stylesheets="@styles.css"/>
-
-            <Label text="• March 2025: Idea generation and wireframe design" styleClass="normal-text"
-                   stylesheets="@styles.css"/>
-
-            <Label text="• April 2025: Implementation of core functionality and data communication"
-                   styleClass="normal-text" stylesheets="@styles.css"/>
-
-            <Label text="• May 2025: Final UI adjustments, UX polishing, and performance optimizations"
-                   styleClass="normal-text" stylesheets="@styles.css"/>
-
-            <Label text="Awards and Recognitions:" styleClass="section-title" stylesheets="@styles.css"/>
-
-            <Label text="🏆 Best JavaFX Application Design – FH Campus Wien Internal Showcase 2025"
-                   styleClass="normal-text" stylesheets="@styles.css"/>
-
-            <Label text="🏆 Excellence in Usability and User Experience – FH Campus Wien Innovation Days 2025"
-                   styleClass="normal-text" stylesheets="@styles.css"/>
-
-            <Label text="Technologies Used: Java 17, JavaFX, Maven, JFoenix" styleClass="small-text"
-                   stylesheets="@styles.css"/>
-
-            <Label text="Version: 1.0.0" styleClass="small-text" stylesheets="@styles.css"/>
-
-            <Label text="Disclaimer: This project is for educational purposes only. All movie data is fictional and intended solely for demonstration."
-                   styleClass="small-text" stylesheets="@styles.css"/>
+            <Label text="Version: 3.4.17" styleClass="small-text" stylesheets="@styles.css" wrapText="true"/>
         </VBox>
     </VBox>
 </VBox>

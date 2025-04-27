@@ -132,7 +132,7 @@ public class MovieCell extends ListCell<Movie> {
         if (isHomeView) {
             if (isMovieOnWatchlist.apply(movie)) {
                 actionBtn.setText("On Watchlist");
-                actionBtn.setStyle("-fx-background-color: #aaaaaa; -fx-text-fill: black;");
+                actionBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white;");
                 actionBtn.setDisable(true);
             } else {
                 actionBtn.setText("Add to Watchlist");
