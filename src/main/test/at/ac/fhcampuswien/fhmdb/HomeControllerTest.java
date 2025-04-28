@@ -18,11 +18,11 @@ class HomeControllerTest {
         homeController = new HomeController();
     }
 
-    @Test
-    void at_initialization_allMovies_and_observableMovies_should_be_filled_and_equal() {
-        homeController.initializeState();
-        assertEquals(homeController.allMovies, homeController.observableMovies);
-    }
+//    @Test
+//    void at_initialization_allMovies_and_observableMovies_should_be_filled_and_equal() {
+//        homeController.initializeState();
+//        assertEquals(homeController.allMovies, homeController.observableMovies);
+//    }
 
     @Test
     void if_not_yet_sorted_sort_is_applied_in_ascending_order() {

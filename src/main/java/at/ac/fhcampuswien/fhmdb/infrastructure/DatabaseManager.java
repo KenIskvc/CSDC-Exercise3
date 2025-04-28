@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class DatabaseManager {
 
     //jdbc:h2:file:C:/Users/kenan/Documents/university/2.semester/programming2/db/movies
-    private final String DB_URL = "jdbc:h2:file:C:/Users/kenan/Documents/university/2.semester/programming2/db/movies";
+    private final String DB_URL = "jdbc:h2:file:./db/movies";
     private String user = "sa";
     private String password = "";
     private ConnectionSource conn;

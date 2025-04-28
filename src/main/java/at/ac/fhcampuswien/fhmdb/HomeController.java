@@ -66,14 +66,19 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        databaseManager = FhmdbApplication.databaseManager;
-        movieRepository = new MovieRepository(databaseManager.getMovieDao());
-        watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
+        initializeInfrastructure();
         initializeState();
         initializeLayout();
     }
 
+    public void initializeInfrastructure() {
+        databaseManager = FhmdbApplication.databaseManager;
+        movieRepository = new MovieRepository(databaseManager.getMovieDao());
+        watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
+    }
+
     public void initializeState() {
+        initializeInfrastructure();
         List<Movie> result = MovieAPI.getAllMovies();
         movieRepository.addAllMovies(result);
         setMovies(result);
