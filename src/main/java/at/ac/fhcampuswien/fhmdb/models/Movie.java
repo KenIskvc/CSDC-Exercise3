@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Movie {
+
     private final String id;
     private final String title;
     private final String description;
@@ -61,7 +62,9 @@ public class Movie {
         }
         return this.title.equals(other.title) && this.description.equals(other.description) && this.genres.equals(other.genres);
     }
-
+    public String getId() {
+        return id;
+    }
     public String getTitle() {
         return title;
     }
