@@ -15,8 +15,7 @@ public class WatchListMovieEntity {
     public WatchListMovieEntity() {
     }
 
-    public WatchListMovieEntity(long id, String apiId) {
-        this.id = id;
+    public WatchListMovieEntity( String apiId) {
         this.apiId = apiId;
     }
 
