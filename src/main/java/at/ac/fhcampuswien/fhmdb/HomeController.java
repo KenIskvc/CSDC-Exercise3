@@ -1,6 +1,8 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.data.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -13,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -41,6 +44,10 @@ public class HomeController implements Initializable {
 
     @FXML
     public JFXButton sortBtn;
+
+    @FXML private MenuItem homeMenuItem;
+    @FXML private MenuItem watchlistMenuItem;
+    @FXML private MenuItem aboutMenuItem;
 
     public List<Movie> allMovies;
 
@@ -80,8 +87,20 @@ public class HomeController implements Initializable {
     }
 
     public void initializeLayout() {
-        movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
+        movieListView.setItems(observableMovies);
+        movieListView.setCellFactory(listView -> new MovieCell(
+                movie -> {
+                    try {
+                        WatchlistRepository.getInstance().addToWatchlist(movie);
+                    } catch (DuplicateMovieException e) {
+                        System.err.println("Movie already in watchlist: " + e.getMessage());
+                    }
+                    movieListView.refresh(); // Button aktualisieren
+                },
+                movie -> WatchlistRepository.getInstance().isOnWatchlist(movie), // <--- NEU: Status Checker
+                true // Home View
+        ));
+
 
         // genre combobox
         Object[] genres = Genre.values();   // get all genres
@@ -243,4 +262,21 @@ public class HomeController implements Initializable {
                 .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
                 .collect(Collectors.toList());
     }
+
+    @FXML
+    private void goToHome() {
+        SceneManager.switchScene("home-view.fxml");
+    }
+
+    @FXML
+    private void goToWatchlist() {
+        SceneManager.switchScene("watchlist-view.fxml");
+    }
+
+    @FXML
+    private void goToAbout() {
+        SceneManager.switchScene("about-view.fxml");
+    }
+
+
 }
