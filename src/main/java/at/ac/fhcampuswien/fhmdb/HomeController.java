@@ -1,11 +1,15 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
-import at.ac.fhcampuswien.fhmdb.data.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
+import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
+import at.ac.fhcampuswien.fhmdb.infrastructure.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.infrastructure.WatchListMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.services.MovieRepository;
+import at.ac.fhcampuswien.fhmdb.services.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -19,6 +23,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,14 +60,22 @@ public class HomeController implements Initializable {
 
     protected SortedState sortedState;
 
+    private DatabaseManager databaseManager;
+    private MovieRepository movieRepository;
+    private WatchlistRepository watchlistRepository;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        databaseManager = FhmdbApplication.databaseManager;
+        movieRepository = new MovieRepository(databaseManager.getMovieDao());
+        watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
         initializeState();
         initializeLayout();
     }
 
     public void initializeState() {
         List<Movie> result = MovieAPI.getAllMovies();
+        movieRepository.addAllMovies(result);
         setMovies(result);
         setMovieList(result);
         sortedState = SortedState.NONE;
@@ -91,13 +104,18 @@ public class HomeController implements Initializable {
         movieListView.setCellFactory(listView -> new MovieCell(
                 movie -> {
                     try {
-                        WatchlistRepository.getInstance().addToWatchlist(movie);
-                    } catch (DuplicateMovieException e) {
-                        System.err.println("Movie already in watchlist: " + e.getMessage());
+                        WatchListMovieEntity entity = new WatchListMovieEntity(movie.getId());
+                        watchlistRepository.addToWatchlist(entity);
+                        //WatchlistRepository.getInstance().addToWatchlist(movie);
+                    } catch (SQLException e) {
+                        System.err.println("SqlException: " + e.getMessage());
                     }
+                    catch (DuplicateMovieException e) {
+                        System.err.println("Movie already in watchlist: " + e.getMessage());
+                   }
                     movieListView.refresh(); // Button aktualisieren
                 },
-                movie -> WatchlistRepository.getInstance().isOnWatchlist(movie), // <--- NEU: Status Checker
+                movie -> watchlistRepository.isOnWatchList(movie.getId()), // <--- NEU: Status Checker
                 true // Home View
         ));
 
