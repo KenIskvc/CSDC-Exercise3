@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.WatchlistController">
+    <VBox VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: black;">
+            <padding>
+                <Insets top="7.0" bottom="7.0" left="10.0" right="10.0"/>
+            </padding>
+            <MenuButton text="☰" styleClass="burger-menu">
+                <items>
+                    <MenuItem fx:id="homeMenuItem" text="Home" onAction="#goToHome"/>
+                    <MenuItem fx:id="watchlistMenuItem" text="Watchlist" onAction="#goToWatchlist"/>
+                    <MenuItem fx:id="aboutMenuItem" text="About" onAction="#goToAbout"/>
+                </items>
+            </MenuButton>
+            <Label text="FHMDb" style="-fx-background-color: F5C518;">
+                <font>
+                    <Font name="Calibri Bold" size="24.0"/>
+                </font>
+                <padding>
+                    <Insets left="2.0" right="2.0"/>
+                </padding>
+            </Label>
+            <Label styleClass="text-white" stylesheets="@styles.css" text="Your Watchlist"/>
+        </HBox>
+
+        <!-- Hier keine Filterleiste -->
+
+        <JFXListView fx:id="watchlistView" stylesheets="@styles.css" VBox.vgrow="ALWAYS"/>
+    </VBox>
+</VBox>
