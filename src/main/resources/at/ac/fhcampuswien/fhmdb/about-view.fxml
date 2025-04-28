@@ -42,7 +42,7 @@
 
             <Label text="FHMDb entstand aus einer simplen Idee: Filme smarter entdecken und sammeln." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
-            <Label text="In einer kleinen Gruppe bestehend aus Khaled Salama, Mohamed Ihsan Atay und Kenan Isakovic wuchs daraus ein Projekt," styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
+            <Label text="In einer kleinen Gruppe bestehend aus Khaled Salama, Muhammed Ihsan Atay und Kenan Isakovic wuchs daraus ein Projekt," styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
             <Label text="dass sich auf klare Strukturen, schnelles Arbeiten und ein aufgeräumtes Design konzentriert." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
 
