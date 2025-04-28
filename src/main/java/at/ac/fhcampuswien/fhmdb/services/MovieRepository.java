@@ -54,6 +54,15 @@ public class MovieRepository {
         int count = 0;
         for (Movie movie : movies) {
             try {
+                MovieEntity existing = dao.queryBuilder()
+                        .where()
+                        .eq("apiId", movie.getId())
+                        .queryForFirst();
+
+                if (existing != null) {
+                    continue;
+                }
+
                 MovieEntity entity = new MovieEntity();
                 entity.setApiId(movie.getId());
                 entity.setTitle(movie.getTitle());

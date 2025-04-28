@@ -38,3 +38,75 @@
     -fx-background-color: white;
     -fx-text-fill: #ffffff;
 }
+
+/* Menü-Button (das ☰ Symbol selbst) */
+.burger-menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Der kleine Pfeil vom MenuButton */
+.menu-button > .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* Wenn das Menü aufklappt */
+.menu-button .context-menu {
+    -fx-background-color: #000000; /* Schwarz */
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+}
+
+/* Die einzelnen Einträge (MenuItem) */
+.menu-item {
+    -fx-background-color: #000000; /* Schwarz */
+    -fx-font-size: 16px;
+}
+
+.menu-item > .label {
+    -fx-text-fill: #ffffff;
+}
+
+
+/* Hover Effekt für MenuItem */
+.menu-item:hover {
+    -fx-background-color: #f5c518; /* Gelb */
+}
+
+.menu-item:hover > .label {
+    -fx-text-fill: #000000; /* Schwarzer Text beim Hover */
+}
+
+
+/* Deaktivierte MenuItems */
+.menu-item:disabled {
+    -fx-background-color: #454545; /* Gleich wie der Light-Background */
+    -fx-text-fill: #aaaaaa; /* Hellgrauer Text */
+}
+
+.header-label {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.section-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+}
+
+.normal-text {
+    -fx-text-fill: #DDDDDD;
+    -fx-font-size: 14px;
+}
+
+.small-text {
+    -fx-text-fill: #BBBBBB;
+    -fx-font-size: 12px;
+}

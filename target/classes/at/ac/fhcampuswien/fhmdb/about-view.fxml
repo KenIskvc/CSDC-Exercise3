@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.fhcampuswien.fhmdb.AboutController" styleClass="background-light-black">
+    <VBox VBox.vgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: black;">
+            <padding>
+                <Insets top="7.0" bottom="7.0" left="10.0" right="10.0"/>
+            </padding>
+            <MenuButton text="☰" styleClass="burger-menu">
+                <items>
+                    <MenuItem fx:id="homeMenuItem" text="Home" onAction="#goToHome"/>
+                    <MenuItem fx:id="watchlistMenuItem" text="Watchlist" onAction="#goToWatchlist"/>
+                    <MenuItem fx:id="aboutMenuItem" text="About" onAction="#goToAbout"/>
+                </items>
+            </MenuButton>
+            <Label text="FHMDb" style="-fx-background-color: F5C518;">
+                <font>
+                    <Font name="Calibri Bold" size="24.0"/>
+                </font>
+                <padding>
+                    <Insets left="2.0" right="2.0"/>
+                </padding>
+            </Label>
+            <Label styleClass="text-white" stylesheets="@styles.css" text="About FHMDb"/>
+        </HBox>
+
+        <!-- Content Bereich -->
+        <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #454545;">
+            <padding>
+                <Insets top="40.0" left="40.0" right="40.0" bottom="40.0"/>
+            </padding>
+
+            <Label text="FHMDb entstand aus einer simplen Idee: Filme smarter entdecken und sammeln." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
+
+            <Label text="In einer kleinen Gruppe bestehend aus Khaled Salama, Mohamed Ihsan Atay und Kenan Isakovic wuchs daraus ein Projekt," styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
+
+            <Label text="dass sich auf klare Strukturen, schnelles Arbeiten und ein aufgeräumtes Design konzentriert." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
+
+            <Label text="In intensiven Sessions wurden Ideen gesponnen, Funktionen entwickelt und alles in zahllosen Codezeilen zum Leben erweckt." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
+
+            <Label text="Heute steht FHMDb als Synonym für Einfachheit, Stil und Effizienz." styleClass="normal-text" stylesheets="@styles.css" wrapText="true"/>
+
+            <Label text="Version: 3.4.17" styleClass="small-text" stylesheets="@styles.css" wrapText="true"/>
+        </VBox>
+    </VBox>
+</VBox>

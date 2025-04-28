@@ -1,9 +1,15 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
+import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
+import at.ac.fhcampuswien.fhmdb.infrastructure.MovieEntity;
+import at.ac.fhcampuswien.fhmdb.infrastructure.WatchListMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
+import at.ac.fhcampuswien.fhmdb.services.MovieRepository;
+import at.ac.fhcampuswien.fhmdb.services.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -13,9 +19,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -42,20 +50,32 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton sortBtn;
 
+    @FXML private MenuItem homeMenuItem;
+    @FXML private MenuItem watchlistMenuItem;
+    @FXML private MenuItem aboutMenuItem;
+
     public List<Movie> allMovies;
 
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
     protected SortedState sortedState;
 
+    private DatabaseManager databaseManager;
+    private MovieRepository movieRepository;
+    private WatchlistRepository watchlistRepository;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        databaseManager = FhmdbApplication.databaseManager;
+        movieRepository = new MovieRepository(databaseManager.getMovieDao());
+        watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
         initializeState();
         initializeLayout();
     }
 
     public void initializeState() {
         List<Movie> result = MovieAPI.getAllMovies();
+        movieRepository.addAllMovies(result);
         setMovies(result);
         setMovieList(result);
         sortedState = SortedState.NONE;
@@ -80,8 +100,25 @@ public class HomeController implements Initializable {
     }
 
     public void initializeLayout() {
-        movieListView.setItems(observableMovies);   // set the items of the listview to the observable list
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // apply custom cells to the listview
+        movieListView.setItems(observableMovies);
+        movieListView.setCellFactory(listView -> new MovieCell(
+                movie -> {
+                    try {
+                        WatchListMovieEntity entity = new WatchListMovieEntity(movie.getId());
+                        watchlistRepository.addToWatchlist(entity);
+                        //WatchlistRepository.getInstance().addToWatchlist(movie);
+                    } catch (SQLException e) {
+                        System.err.println("SqlException: " + e.getMessage());
+                    }
+                    catch (DuplicateMovieException e) {
+                        System.err.println("Movie already in watchlist: " + e.getMessage());
+                   }
+                    movieListView.refresh(); // Button aktualisieren
+                },
+                movie -> watchlistRepository.isOnWatchList(movie.getId()), // <--- NEU: Status Checker
+                true // Home View
+        ));
+
 
         // genre combobox
         Object[] genres = Genre.values();   // get all genres
@@ -243,4 +280,21 @@ public class HomeController implements Initializable {
                 .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
                 .collect(Collectors.toList());
     }
+
+    @FXML
+    private void goToHome() {
+        SceneManager.switchScene("home-view.fxml");
+    }
+
+    @FXML
+    private void goToWatchlist() {
+        SceneManager.switchScene("watchlist-view.fxml");
+    }
+
+    @FXML
+    private void goToAbout() {
+        SceneManager.switchScene("about-view.fxml");
+    }
+
+
 }

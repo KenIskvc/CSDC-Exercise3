@@ -50,7 +50,7 @@ public class MovieEntity {
         this.rating = rating;
     }
 
-    public String genresToString(List<Genre> genres) {
+    public static String genresToString(List<Genre> genres) {
         String genresString = "";
         for (Genre genre : genres) {
             if(!genresString.isEmpty()) {
@@ -61,7 +61,7 @@ public class MovieEntity {
         return genresString;
     }
 
-    public List<Genre> stringToGenres(String genres) {
+    public static List<Genre> stringToGenres(String genres) {
         List<Genre> genreList = new ArrayList<>();
         if (genres != null && !genres.isEmpty()) {
             String[] genreStrings = genres.split(",");
@@ -76,7 +76,7 @@ public class MovieEntity {
         return genreList;
     }
 
-    public List<MovieEntity> fromMovies(List<Movie> movies) {
+    public static List<MovieEntity> fromMovies(List<Movie> movies) {
         List<MovieEntity> movieEntities = new ArrayList<>();
         for (Movie movie : movies) {
             MovieEntity entity = new MovieEntity(
@@ -94,11 +94,11 @@ public class MovieEntity {
         return movieEntities;
     }
 
-    public List<Movie> toMovies(List<MovieEntity> movieEntities) {
+    public static List<Movie> toMovies(List<MovieEntity> movieEntities) {
         List<Movie> movies = new ArrayList<>();
         for (MovieEntity entity : movieEntities) {
             Movie movie = new Movie(
-                    entity.getApiId(),
+                    entity.apiId,
                     entity.getTitle(),
                     entity.getDescription(),
                     stringToGenres(entity.getGenres()),
@@ -107,8 +107,8 @@ public class MovieEntity {
                     entity.getLengthInMinutes(),
                     entity.getRating()
             );
+            movies.add(movie);
         }
-
         return movies;
     }
 
