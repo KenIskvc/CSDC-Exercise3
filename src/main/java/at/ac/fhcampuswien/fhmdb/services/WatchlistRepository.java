@@ -5,6 +5,7 @@ import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseOperationException;
 import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
 import at.ac.fhcampuswien.fhmdb.exceptions.MovieNotFoundException;
 import at.ac.fhcampuswien.fhmdb.infrastructure.WatchListMovieEntity;
+import at.ac.fhcampuswien.fhmdb.utilities.ExceptionUtility;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -23,12 +24,13 @@ public class WatchlistRepository {
         try {
             return dao.queryForAll();
         } catch (SQLException e) {
-            throw new DatabaseAccessException("Failed to fetch watchlist", e);
+            ExceptionUtility.logError("Database Error while fetching watchlist", e);
+            throw new DatabaseAccessException("Failed to fetch watchlist");
         }
     }
 
 
-    public int addToWatchlist(WatchListMovieEntity movie) throws DuplicateMovieException, SQLException {
+    public int addToWatchlist(WatchListMovieEntity movie) throws DuplicateMovieException, DatabaseOperationException {
         try{
             if (isOnWatchList(movie.getApiId())) {
                 throw new DuplicateMovieException("Movie already exists in the watchlist: " + movie.getApiId());
@@ -36,7 +38,8 @@ public class WatchlistRepository {
 
         return dao.create(movie);
         } catch (SQLException e) {
-            throw new DatabaseOperationException("Database error while adding movie to watchlist", e);
+            ExceptionUtility.logError("Database Error while adding movie to watchlist", e);
+            throw new DatabaseOperationException("Database error while adding movie to watchlist");
         }
 
     }
@@ -56,7 +59,8 @@ public class WatchlistRepository {
         }
         return deleted;
     } catch (SQLException e) {
-            throw new DatabaseOperationException("Database error while removing movie from watchlist", e);
+            ExceptionUtility.logError("Database Error while removing movie from watchlist", e);
+            throw new DatabaseOperationException("Database error while removing movie from watchlist");
         }
     }
 
@@ -70,7 +74,8 @@ public class WatchlistRepository {
                     .queryForFirst();
             return existing != null;
         } catch (SQLException e) {
-            throw new DatabaseOperationException("Database error while checking watchlist", e);
+            ExceptionUtility.logError("Database Error while checking watchlist", e);
+            throw new DatabaseOperationException("Database error while checking watchlist");
         }
     }
 
