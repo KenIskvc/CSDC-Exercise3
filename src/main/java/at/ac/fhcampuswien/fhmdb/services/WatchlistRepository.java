@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.services;
 
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseAccessException;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseOperationException;
 import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
 import at.ac.fhcampuswien.fhmdb.exceptions.MovieNotFoundException;
 import at.ac.fhcampuswien.fhmdb.infrastructure.WatchListMovieEntity;
@@ -28,16 +29,23 @@ public class WatchlistRepository {
 
 
     public int addToWatchlist(WatchListMovieEntity movie) throws DuplicateMovieException, SQLException {
-        if (isOnWatchList(movie.getApiId())) {
-            throw new DuplicateMovieException("Movie already exists in the watchlist: " + movie.getApiId());
+        try{
+            if (isOnWatchList(movie.getApiId())) {
+                throw new DuplicateMovieException("Movie already exists in the watchlist: " + movie.getApiId());
+            }
+
+        return dao.create(movie);
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Database error while adding movie to watchlist", e);
         }
 
-        return dao.create(movie); // gibt 1 zurück, falls erfolgreich
     }
 
 
-    public int removeFromWatchlist(String apiId) throws MovieNotFoundException, SQLException {
-        List<WatchListMovieEntity> movies = dao.queryForEq("apiId", apiId);
+    public int removeFromWatchlist(String apiId) {
+        try{
+            List<WatchListMovieEntity> movies = dao.queryForEq("apiId", apiId);
+
         if (movies.isEmpty()) {
             throw new MovieNotFoundException("No movie found with apiId: " + apiId);
         }
@@ -47,6 +55,9 @@ public class WatchlistRepository {
             deleted += dao.delete(movie);
         }
         return deleted;
+    } catch (SQLException e) {
+            throw new DatabaseOperationException("Database error while removing movie from watchlist", e);
+        }
     }
 
 
@@ -59,7 +70,7 @@ public class WatchlistRepository {
                     .queryForFirst();
             return existing != null;
         } catch (SQLException e) {
-            throw new RuntimeException("Database error while checking watchlist", e);
+            throw new DatabaseOperationException("Database error while checking watchlist", e);
         }
     }
 
