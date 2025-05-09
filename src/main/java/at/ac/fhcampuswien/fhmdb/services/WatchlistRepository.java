@@ -50,6 +50,7 @@ public class WatchlistRepository {
     }
 
 
+
     public boolean isOnWatchList(String apiId) {
         try {
             WatchListMovieEntity existing = dao.queryBuilder()

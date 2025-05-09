@@ -25,6 +25,7 @@ public class WatchlistController {
     @FXML private MenuItem watchlistMenuItem;
     @FXML private MenuItem aboutMenuItem;
 
+
     @FXML
     private JFXListView<Movie> watchlistView;
 
