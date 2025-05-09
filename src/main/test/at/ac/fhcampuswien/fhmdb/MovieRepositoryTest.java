@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseOperationException;
 import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.infrastructure.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
@@ -33,7 +34,7 @@ public class MovieRepositoryTest {
     }
 
     @Test
-    void testAddAndRetrieveMovies() {
+    void testAddAndRetrieveMovies() throws DatabaseOperationException {
         List<Movie> movies = Arrays.asList(
                 new Movie(
                         "Avatar",
@@ -65,7 +66,7 @@ public class MovieRepositoryTest {
     }
 
     @Test
-    void testRemoveAllMovies() {
+    void testRemoveAllMovies() throws DatabaseOperationException {
         movieRepo.removeAll();
         List<MovieEntity> movies = movieRepo.getAllMovies();
 
@@ -73,7 +74,7 @@ public class MovieRepositoryTest {
     }
 
     @Test
-    void testGetMovieByApiId() {
+    void testGetMovieByApiId() throws DatabaseOperationException {
         Movie movie = new Movie(
                 "Some Title",
                 "Some Description",

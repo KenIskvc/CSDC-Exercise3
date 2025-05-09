@@ -1,7 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.infrastructure;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.InvalidGenreException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieMappingException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.utilities.ExceptionUtility;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -50,7 +53,11 @@ public class MovieEntity {
         this.rating = rating;
     }
 
-    public static String genresToString(List<Genre> genres) {
+    public static String genresToString(List<Genre> genres) throws InvalidGenreException {
+        if(genres.isEmpty()) {
+            throw new InvalidGenreException("One or more genres were not able to be assigned.");
+        }
+
         String genresString = "";
         for (Genre genre : genres) {
             if(!genresString.isEmpty()) {
@@ -61,7 +68,7 @@ public class MovieEntity {
         return genresString;
     }
 
-    public static List<Genre> stringToGenres(String genres) {
+    public static List<Genre> stringToGenres(String genres) throws InvalidGenreException {
         List<Genre> genreList = new ArrayList<>();
         if (genres != null && !genres.isEmpty()) {
             String[] genreStrings = genres.split(",");
@@ -69,45 +76,59 @@ public class MovieEntity {
                 try {
                     genreList.add(Genre.valueOf(genreStr.trim().toUpperCase()));
                 } catch (IllegalArgumentException e) {
-                    // Skip invalid genres or log an error if needed
+                    throw new InvalidGenreException("One or more genres were not able to be assigned.");
                 }
             }
         }
         return genreList;
     }
 
-    public static List<MovieEntity> fromMovies(List<Movie> movies) {
+    public static List<MovieEntity> fromMovies(List<Movie> movies) throws MovieMappingException {
         List<MovieEntity> movieEntities = new ArrayList<>();
-        for (Movie movie : movies) {
-            MovieEntity entity = new MovieEntity(
-                    movie.getId(),
-                    movie.getTitle(),
-                    movie.getDescription(),
-                    genresToString(movie.getGenres()),
-                    movie.getReleaseYear(),
-                    movie.getImgUrl(),
-                    movie.getLengthInMinutes(),
-                    movie.getRating()
-            );
-            movieEntities.add(entity);
+        try {
+            for (Movie movie : movies) {
+                MovieEntity entity = new MovieEntity(
+                        movie.getId(),
+                        movie.getTitle(),
+                        movie.getDescription(),
+                        genresToString(movie.getGenres()),
+                        movie.getReleaseYear(),
+                        movie.getImgUrl(),
+                        movie.getLengthInMinutes(),
+                        movie.getRating()
+                );
+                movieEntities.add(entity);
+            }
+        } catch ( InvalidGenreException e ) {
+            System.err.println(e.getMessage());
+            throw new MovieMappingException(e.getMessage());
+        } catch (Exception e) {
+            throw new MovieMappingException("Mapping the movie entities to movie objects failed.");
         }
         return movieEntities;
     }
 
-    public static List<Movie> toMovies(List<MovieEntity> movieEntities) {
+    public static List<Movie> toMovies(List<MovieEntity> movieEntities) throws MovieMappingException {
         List<Movie> movies = new ArrayList<>();
-        for (MovieEntity entity : movieEntities) {
-            Movie movie = new Movie(
-                    entity.apiId,
-                    entity.getTitle(),
-                    entity.getDescription(),
-                    stringToGenres(entity.getGenres()),
-                    entity.getReleaseYear(),
-                    entity.getImgUrl(),
-                    entity.getLengthInMinutes(),
-                    entity.getRating()
-            );
-            movies.add(movie);
+        try {
+            for (MovieEntity entity : movieEntities) {
+                Movie movie = new Movie(
+                        entity.apiId,
+                        entity.getTitle(),
+                        entity.getDescription(),
+                        stringToGenres(entity.getGenres()),
+                        entity.getReleaseYear(),
+                        entity.getImgUrl(),
+                        entity.getLengthInMinutes(),
+                        entity.getRating()
+                );
+                movies.add(movie);
+            }
+        } catch ( InvalidGenreException e ) {
+            System.err.println(e.getMessage());
+            throw new MovieMappingException(e.getMessage());
+        } catch (Exception e) {
+            throw new MovieMappingException("Mapping the movie entities to movie objects failed.");
         }
         return movies;
     }

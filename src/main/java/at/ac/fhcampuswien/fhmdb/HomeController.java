@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseOperationException;
 import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
 import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.infrastructure.MovieEntity;
@@ -11,6 +12,7 @@ import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import at.ac.fhcampuswien.fhmdb.services.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.services.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.utilities.ExceptionUtility;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -78,30 +80,34 @@ public class HomeController implements Initializable {
     }
 
     public void initializeState() {
-        initializeInfrastructure();
-        List<Movie> result = MovieAPI.getAllMovies();
-        movieRepository.addAllMovies(result);
-        setMovies(result);
-        setMovieList(result);
-        sortedState = SortedState.NONE;
+        try {
+            initializeInfrastructure();
+            List<Movie> result = MovieAPI.getAllMovies();
+            movieRepository.addAllMovies(result);
+            setMovies(result);
+            setMovieList(result);
+            sortedState = SortedState.NONE;
 
-        // test stream methods
-        System.out.println("getMostPopularActor");
-        System.out.println(getMostPopularActor(allMovies));
+            // test stream methods
+            System.out.println("getMostPopularActor");
+            System.out.println(getMostPopularActor(allMovies));
 
-        System.out.println("getLongestMovieTitle");
-        System.out.println(getLongestMovieTitle(allMovies));
+            System.out.println("getLongestMovieTitle");
+            System.out.println(getLongestMovieTitle(allMovies));
 
-        System.out.println("count movies from Zemeckis");
-        System.out.println(countMoviesFrom(allMovies, "Robert Zemeckis"));
+            System.out.println("count movies from Zemeckis");
+            System.out.println(countMoviesFrom(allMovies, "Robert Zemeckis"));
 
-        System.out.println("count movies from Steven Spielberg");
-        System.out.println(countMoviesFrom(allMovies, "Steven Spielberg"));
+            System.out.println("count movies from Steven Spielberg");
+            System.out.println(countMoviesFrom(allMovies, "Steven Spielberg"));
 
-        System.out.println("getMoviewsBetweenYears");
-        List<Movie> between = getMoviesBetweenYears(allMovies, 1994, 2000);
-        System.out.println(between.size());
-        System.out.println(between.stream().map(Objects::toString).collect(Collectors.joining(", ")));
+            System.out.println("getMoviewsBetweenYears");
+            List<Movie> between = getMoviesBetweenYears(allMovies, 1994, 2000);
+            System.out.println(between.size());
+            System.out.println(between.stream().map(Objects::toString).collect(Collectors.joining(", ")));
+        } catch (DatabaseOperationException e) {
+            ExceptionUtility.showError("Database Operation Exception", e.getMessage());
+        }
     }
 
     public void initializeLayout() {
