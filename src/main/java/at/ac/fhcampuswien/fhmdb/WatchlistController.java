@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import com.jfoenix.controls.JFXListView;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
 
 import java.sql.SQLException;
@@ -24,6 +25,7 @@ public class WatchlistController {
     @FXML private MenuItem watchlistMenuItem;
     @FXML private MenuItem aboutMenuItem;
 
+
     @FXML
     private JFXListView<Movie> watchlistView;
 
@@ -32,6 +34,18 @@ public class WatchlistController {
     private WatchlistRepository watchlistRepository;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    private void logError(String message, Exception e) {
+        System.err.println("[ERROR] " + message);
+        e.printStackTrace();
+    }
+
 
     @FXML
     public void initialize() {
@@ -39,26 +53,36 @@ public class WatchlistController {
         movieRepository = new MovieRepository(databaseManager.getMovieDao());
         watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
 
-        initializeMoviesFromWatchlist();
+        try {
+            initializeMoviesFromWatchlist();
+        } catch (Exception e) {
+            showError("Fehler beim Laden der Watchlist", "Die Filme konnten nicht geladen werden.");
+            logError("Fehler beim Initialisieren der Watchlist", e);
+        }
+
         watchlistView.setCellFactory(listView -> new MovieCell(
                 movie -> {
                     try {
                         watchlistRepository.removeFromWatchlist(movie.getId());
                         initializeMoviesFromWatchlist();
-//                        WatchlistRepository.getInstance().removeFromWatchlist(movie);
                     } catch (MovieNotFoundException e) {
-                        System.err.println("Error removing movie from watchlist: " + e.getMessage());
+                        showError("Film nicht gefunden", "Der Film konnte nicht von der Watchlist entfernt werden.");
+                        logError("Film nicht gefunden: " + movie.getId(), e);
                     } catch (SQLException e) {
-                        System.err.println("SQL Exception: " + e.getMessage());
+                        showError("Datenbankfehler", "Beim Entfernen des Films ist ein Fehler aufgetreten.");
+                        logError("SQL-Fehler beim Entfernen von Film mit ID: " + movie.getId(), e);
                     }
-                    watchlistView.refresh(); // UI sofort aktualisieren
+                    watchlistView.refresh();
                 },
-                movie -> true, // Weil alle Filme hier schon in der Watchlist sind
-                false // nicht HomeView → WatchlistView
+                movie -> true,
+                false
         ));
     }
 
-    private void initializeMoviesFromWatchlist() {
+
+
+
+    private void initializeMoviesFromWatchlist() throws SQLException{
         //watchlistView.setItems(WatchlistRepository.getInstance().getWatchlist());
         var watchlist = watchlistRepository.getWatchlist();
         List<MovieEntity> moviesFromWatchList = new ArrayList<>();
