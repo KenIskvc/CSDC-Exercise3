@@ -118,10 +118,7 @@ public class HomeController implements Initializable {
                         WatchListMovieEntity entity = new WatchListMovieEntity(movie.getId());
                         watchlistRepository.addToWatchlist(entity);
                         //WatchlistRepository.getInstance().addToWatchlist(movie);
-                    } catch (SQLException e) {
-                        System.err.println("SqlException: " + e.getMessage());
-                    }
-                    catch (DuplicateMovieException e) {
+                    } catch (DuplicateMovieException e) {
                         System.err.println("Movie already in watchlist: " + e.getMessage());
                    }
                     movieListView.refresh(); // Button aktualisieren

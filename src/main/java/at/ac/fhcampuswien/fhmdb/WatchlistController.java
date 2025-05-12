@@ -41,6 +41,13 @@ public class WatchlistController {
 
         try {
             initializeMoviesFromWatchlist();
+
+            /** Auskommentieren um die ExceptionUtility zu testen
+
+            ExceptionUtility.showError("Vorzeige Alert", "Das ist ein Beispiel Alert");
+            ExceptionUtility.logError("Das ist ein Beispiel Log", new Exception("Beispiel Exception"));
+
+             */
         } catch (Exception e) {
             ExceptionUtility.showError("Fehler beim Laden der Watchlist", "Die Filme konnten nicht geladen werden.");
             ExceptionUtility.logError("Fehler beim Initialisieren der Watchlist", e);
@@ -62,6 +69,7 @@ public class WatchlistController {
                         ExceptionUtility.logError(e.getMessage(), e);
                     } catch (DatabaseOperationException e) {
                         ExceptionUtility.showError("Datenbankfehler", e.getMessage());
+                        ExceptionUtility.logError("Datenbankfehler: " + e.getMessage(), e);
                     }
                     watchlistView.refresh();
                 },
