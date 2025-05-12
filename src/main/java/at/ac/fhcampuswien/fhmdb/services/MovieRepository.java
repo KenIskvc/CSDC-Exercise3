@@ -87,11 +87,11 @@ public class MovieRepository {
                 throw new DatabaseOperationException(e.getMessage());
             } catch (SQLException e) {
                 ExceptionUtility.logError("Database Error occured while adding movies", e);
-                throw  new DatabaseOperationException("An internal error occured. Please ensure a stable network connection.");
+                throw  new DatabaseOperationException("Please ensure a stable network connection.");
             }
         }
         return count;
-    }
+}
 
 
 

@@ -111,6 +111,8 @@ public class MovieEntity {
     }
 
     public static List<Movie> toMovies(List<MovieEntity> movieEntities) throws MovieMappingException {
+        //throw new MovieMappingException("Mapping the movie entities to movie objects failed.");
+
         List<Movie> movies = new ArrayList<>();
         try {
             for (MovieEntity entity : movieEntities) {

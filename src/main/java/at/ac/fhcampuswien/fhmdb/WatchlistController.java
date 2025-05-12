@@ -51,7 +51,7 @@ public class WatchlistController {
              */
         } catch (Exception e) {
             ExceptionUtility.showError("Fehler beim Laden der Watchlist", "Die Filme konnten nicht geladen werden.");
-            ExceptionUtility.logError("Fehler beim Initialisieren der Watchlist", e);
+            ExceptionUtility.logError(e.getMessage(), e);
         }
 
         watchlistView.setCellFactory(listView -> new MovieCell(

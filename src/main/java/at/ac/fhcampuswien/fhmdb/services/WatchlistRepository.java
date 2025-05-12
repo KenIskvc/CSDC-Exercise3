@@ -41,7 +41,6 @@ public class WatchlistRepository {
             ExceptionUtility.logError("Database Error while adding movie to watchlist", e);
             throw new DatabaseOperationException("Database error while adding movie to watchlist");
         }
-
     }
 
 

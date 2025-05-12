@@ -108,7 +108,7 @@ public class HomeController implements Initializable {
 
             movieRepository.addAllMovies(result);
         } catch (DatabaseOperationException e) {
-            ExceptionUtility.showError("Database Operation Exception", e.getMessage());
+            ExceptionUtility.showError("Internal Error", e.getMessage());
         }
     }
 
@@ -119,9 +119,9 @@ public class HomeController implements Initializable {
                     try {
                         WatchListMovieEntity entity = new WatchListMovieEntity(movie.getId());
                         watchlistRepository.addToWatchlist(entity);
-                        //WatchlistRepository.getInstance().addToWatchlist(movie);
                     } catch (DuplicateMovieException e) {
-                        System.err.println("Movie already in watchlist: " + e.getMessage());
+                        ExceptionUtility.logError("Duplicate Movie", e);
+                        ExceptionUtility.showError("Internal Error", e.getMessage());
                    }
                     movieListView.refresh(); // Button aktualisieren
                 },
