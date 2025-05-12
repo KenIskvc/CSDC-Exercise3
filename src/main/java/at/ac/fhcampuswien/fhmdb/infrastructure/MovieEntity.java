@@ -69,6 +69,8 @@ public class MovieEntity {
     }
 
     public static List<Genre> stringToGenres(String genres) throws InvalidGenreException {
+        //throw new InvalidGenreException("One or more genres were not able to be assigned.");
+
         List<Genre> genreList = new ArrayList<>();
         if (genres != null && !genres.isEmpty()) {
             String[] genreStrings = genres.split(",");
@@ -100,7 +102,7 @@ public class MovieEntity {
                 movieEntities.add(entity);
             }
         } catch ( InvalidGenreException e ) {
-            System.err.println(e.getMessage());
+            ExceptionUtility.logError(e.getMessage(), e);
             throw new MovieMappingException(e.getMessage());
         } catch (Exception e) {
             throw new MovieMappingException("Mapping the movie entities to movie objects failed.");
@@ -125,7 +127,7 @@ public class MovieEntity {
                 movies.add(movie);
             }
         } catch ( InvalidGenreException e ) {
-            System.err.println(e.getMessage());
+            ExceptionUtility.logError(e.getMessage(), e);
             throw new MovieMappingException(e.getMessage());
         } catch (Exception e) {
             throw new MovieMappingException("Mapping the movie entities to movie objects failed.");

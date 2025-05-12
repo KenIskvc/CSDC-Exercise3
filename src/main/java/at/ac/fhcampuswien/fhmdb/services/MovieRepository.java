@@ -29,6 +29,8 @@ public class MovieRepository {
     }
 
     public MovieEntity getMovie(String apiId) throws DatabaseOperationException {
+        //throw new DatabaseOperationException("An internal error occured.");
+
         try {
             return dao.queryBuilder()
                     .where()
@@ -55,6 +57,8 @@ public class MovieRepository {
     }
 
     public int addAllMovies(List<Movie> movies) throws DatabaseOperationException {
+        //throw  new DatabaseOperationException("An internal error occured. Please ensure a stable network connection.");
+
         int count = 0;
         for (Movie movie : movies) {
             try {
@@ -83,7 +87,7 @@ public class MovieRepository {
                 throw new DatabaseOperationException(e.getMessage());
             } catch (SQLException e) {
                 ExceptionUtility.logError("Database Error occured while adding movies", e);
-                throw  new DatabaseOperationException("An internal error occured while adding movies");
+                throw  new DatabaseOperationException("An internal error occured. Please ensure a stable network connection.");
             }
         }
         return count;

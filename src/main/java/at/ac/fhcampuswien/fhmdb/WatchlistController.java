@@ -10,6 +10,7 @@ import at.ac.fhcampuswien.fhmdb.services.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.exceptions.MovieNotFoundException;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.utilities.ExceptionUtility;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -69,7 +70,6 @@ public class WatchlistController {
                         ExceptionUtility.logError(e.getMessage(), e);
                     } catch (DatabaseOperationException e) {
                         ExceptionUtility.showError("Datenbankfehler", e.getMessage());
-                        ExceptionUtility.logError("Datenbankfehler: " + e.getMessage(), e);
                     }
                     watchlistView.refresh();
                 },

@@ -16,6 +16,7 @@ import at.ac.fhcampuswien.fhmdb.utilities.ExceptionUtility;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -83,7 +84,6 @@ public class HomeController implements Initializable {
         try {
             initializeInfrastructure();
             List<Movie> result = MovieAPI.getAllMovies();
-            movieRepository.addAllMovies(result);
             setMovies(result);
             setMovieList(result);
             sortedState = SortedState.NONE;
@@ -105,6 +105,8 @@ public class HomeController implements Initializable {
             List<Movie> between = getMoviesBetweenYears(allMovies, 1994, 2000);
             System.out.println(between.size());
             System.out.println(between.stream().map(Objects::toString).collect(Collectors.joining(", ")));
+
+            movieRepository.addAllMovies(result);
         } catch (DatabaseOperationException e) {
             ExceptionUtility.showError("Database Operation Exception", e.getMessage());
         }
