@@ -1,10 +1,11 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.observer.Observer;
+import javafx.scene.control.Alert;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseOperationException;
 import at.ac.fhcampuswien.fhmdb.exceptions.DuplicateMovieException;
 import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
-import at.ac.fhcampuswien.fhmdb.infrastructure.MovieEntity;
 import at.ac.fhcampuswien.fhmdb.infrastructure.WatchListMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -26,12 +27,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class HomeController implements Initializable {
+public class HomeController implements Initializable, Observer {
     @FXML
     public JFXButton searchBtn;
 
@@ -72,6 +72,7 @@ public class HomeController implements Initializable {
         initializeInfrastructure();
         initializeState();
         initializeLayout();
+        watchlistRepository.addObserver(this);
     }
 
     public void initializeInfrastructure() {
@@ -289,6 +290,16 @@ public class HomeController implements Initializable {
         return movies.stream()
                 .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Watchlist");
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
     @FXML

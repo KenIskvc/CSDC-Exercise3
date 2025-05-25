@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.observer.Observer;
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseOperationException;
 import at.ac.fhcampuswien.fhmdb.exceptions.MovieMappingException;
 import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
@@ -23,7 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WatchlistController {
+public class WatchlistController implements Observer {
     @FXML private MenuItem homeMenuItem;
     @FXML private MenuItem watchlistMenuItem;
     @FXML private MenuItem aboutMenuItem;
@@ -39,6 +40,7 @@ public class WatchlistController {
         databaseManager = FhmdbApplication.databaseManager;
         movieRepository = new MovieRepository(databaseManager.getMovieDao());
         watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
+        watchlistRepository.addObserver(this);
 
         try {
             initializeMoviesFromWatchlist();
@@ -91,6 +93,16 @@ public class WatchlistController {
         observableMovies.clear();
         observableMovies.addAll(newMovies);
         watchlistView.setItems(observableMovies);
+    }
+
+    @Override
+    public void update(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Watchlist");
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
     @FXML
