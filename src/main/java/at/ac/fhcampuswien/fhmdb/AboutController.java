@@ -4,9 +4,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 
 public class AboutController {
+
     @FXML private MenuItem homeMenuItem;
     @FXML private MenuItem watchlistMenuItem;
     @FXML private MenuItem aboutMenuItem;
+
+    // 💡 WICHTIG für ControllerFactory: expliziter leerer Konstruktor
+    public AboutController() {
+        // Keine Initialisierung notwendig
+    }
 
     @FXML
     private void goToHome() {
@@ -22,5 +28,4 @@ public class AboutController {
     private void goToAbout() {
         SceneManager.switchScene("about-view.fxml");
     }
-
 }
