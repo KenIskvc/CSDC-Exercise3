@@ -11,7 +11,6 @@ import at.ac.fhcampuswien.fhmdb.infrastructure.DatabaseManager;
 import at.ac.fhcampuswien.fhmdb.infrastructure.WatchListMovieEntity;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import at.ac.fhcampuswien.fhmdb.services.MovieRepository;
 import at.ac.fhcampuswien.fhmdb.services.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -63,9 +62,7 @@ public class HomeController implements Initializable, Observer {
 
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
-    protected SortedState sortedState;
-
-    private ISortedSate state;
+    private ISortedSate state = new NotSortedState();;
 
     private DatabaseManager databaseManager;
     private MovieRepository movieRepository;
@@ -87,13 +84,9 @@ public class HomeController implements Initializable, Observer {
 
     public void initializeState() {
         try {
-            //initializeInfrastructure();
             List<Movie> result = MovieAPI.getAllMovies();
             setMovies(result);
             setMovieList(result);
-            //sortedState = SortedState.NONE;
-            state = new NotSortedState();
-            setSortButton();
 
             // test stream methods
             System.out.println("getMostPopularActor");
@@ -171,7 +164,7 @@ public class HomeController implements Initializable, Observer {
     public void setMovieList(List<Movie> movies) {
         observableMovies.clear();
         observableMovies.addAll(movies);
-        state.sort(observableMovies);
+        this.state.sort(observableMovies);
     }
 
     public void setSortButton() {
@@ -179,26 +172,9 @@ public class HomeController implements Initializable, Observer {
     }
 
     public void sortMovies(){
-//        if (sortedState == SortedState.NONE || sortedState == SortedState.DESCENDING) {
-//            sortMovies(SortedState.ASCENDING);
-//        } else if (sortedState == SortedState.ASCENDING) {
-//            sortMovies(SortedState.DESCENDING);
-//        }
-        state.next();
-        state.sort(observableMovies);
+        this.state = this.state.next();
+        this.state.sort(observableMovies);
         setSortButton();
-    }
-    // sort movies based on sortedState
-    // by default sorted state is NONE
-    // afterwards it switches between ascending and descending
-    public void sortMovies(SortedState sortDirection) {
-        if (sortDirection == SortedState.ASCENDING) {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle));
-            sortedState = SortedState.ASCENDING;
-        } else {
-            observableMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-            sortedState = SortedState.DESCENDING;
-        }
     }
 
     public List<Movie> filterByQuery(List<Movie> movies, String query){
@@ -235,8 +211,6 @@ public class HomeController implements Initializable, Observer {
             filteredMovies = filterByGenre(filteredMovies, Genre.valueOf(genre.toString()));
         }
 
-//        observableMovies.clear();
-//        observableMovies.addAll(filteredMovies);
         setMovieList(filteredMovies);
     }
 
@@ -254,9 +228,6 @@ public class HomeController implements Initializable, Observer {
         List<Movie> movies = getMovies(searchQuery, genre, releaseYear, ratingFrom);
         setMovies(movies);
         setMovieList(movies);
-        // applyAllFilters(searchQuery, genre);
-
-        //sortMovies(sortedState);
     }
 
     public String validateComboboxValue(Object value) {

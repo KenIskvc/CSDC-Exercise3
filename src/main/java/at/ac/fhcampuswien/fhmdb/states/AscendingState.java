@@ -5,9 +5,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
 import javafx.collections.ObservableList;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class AscendingState implements ISortedSate {
 
