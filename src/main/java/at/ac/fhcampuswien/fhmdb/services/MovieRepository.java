@@ -8,15 +8,22 @@ import at.ac.fhcampuswien.fhmdb.utilities.ExceptionUtility;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieRepository {
+    private static MovieRepository instance;
 
-    private Dao<MovieEntity, Long> dao;
+    private final Dao<MovieEntity, Long> dao;
 
     public MovieRepository(Dao<MovieEntity, Long> dao) {
         this.dao = dao;
+    }
+
+    public static MovieRepository getInstance(Dao<MovieEntity, Long> dao) {
+        if (instance == null) {
+            instance = new MovieRepository(dao);
+        }
+        return instance;
     }
 
     public List<MovieEntity> getAllMovies() throws DatabaseOperationException {
@@ -24,21 +31,19 @@ public class MovieRepository {
             return dao.queryForAll();
         } catch (SQLException e) {
             ExceptionUtility.logError("Database Error while fetching all movies", e);
-            throw new DatabaseOperationException("An internal error occured.");
+            throw new DatabaseOperationException("An internal error occurred.");
         }
     }
 
     public MovieEntity getMovie(String apiId) throws DatabaseOperationException {
-        //throw new DatabaseOperationException("An internal error occured.");
-
         try {
             return dao.queryBuilder()
                     .where()
                     .eq("apiId", apiId)
                     .queryForFirst();
         } catch (Exception e) {
-            ExceptionUtility.logError("Database Error while deleting all movies", e);
-            throw new DatabaseOperationException("An internal error occured.");
+            ExceptionUtility.logError("Database Error while retrieving movie", e);
+            throw new DatabaseOperationException("An internal error occurred.");
         }
     }
 
@@ -52,13 +57,11 @@ public class MovieRepository {
             return count;
         } catch (SQLException e) {
             ExceptionUtility.logError("Database Error while deleting all movies", e);
-            throw new DatabaseOperationException("An internal error occured.");
+            throw new DatabaseOperationException("An internal error occurred.");
         }
     }
 
     public int addAllMovies(List<Movie> movies) throws DatabaseOperationException {
-        //throw  new DatabaseOperationException("An internal error occured. Please ensure a stable network connection.");
-
         int count = 0;
         for (Movie movie : movies) {
             try {
@@ -67,32 +70,28 @@ public class MovieRepository {
                         .eq("apiId", movie.getId())
                         .queryForFirst();
 
-                if (existing != null) {
-                    continue;
-                }
+                if (existing != null) continue;
 
                 MovieEntity entity = new MovieEntity();
                 entity.setApiId(movie.getId());
                 entity.setTitle(movie.getTitle());
                 entity.setDescription(movie.getDescription());
-                entity.setGenres(entity.genresToString(movie.getGenres()));
+                entity.setGenres(MovieEntity.genresToString(movie.getGenres()));
                 entity.setReleaseYear(movie.getReleaseYear());
                 entity.setRating(movie.getRating());
                 entity.setImgUrl(movie.getImgUrl());
                 entity.setLengthInMinutes(movie.getLengthInMinutes());
+
                 dao.create(entity);
                 count++;
             } catch (InvalidGenreException e) {
                 ExceptionUtility.logError(e.getMessage(), e);
                 throw new DatabaseOperationException(e.getMessage());
             } catch (SQLException e) {
-                ExceptionUtility.logError("Database Error occured while adding movies", e);
-                throw  new DatabaseOperationException("Please ensure a stable network connection.");
+                ExceptionUtility.logError("Database Error occurred while adding movies", e);
+                throw new DatabaseOperationException("Please ensure a stable network connection.");
             }
         }
         return count;
-}
-
-
-
+    }
 }

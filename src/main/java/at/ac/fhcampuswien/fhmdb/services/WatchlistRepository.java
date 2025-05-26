@@ -16,12 +16,20 @@ import java.util.List;
 
 
 public class WatchlistRepository implements Observable {
+    private static WatchlistRepository instance;
 
     private final List<Observer> observers = new ArrayList<>();
-    private Dao<WatchListMovieEntity, Long> dao;
+    private final Dao<WatchListMovieEntity, Long> dao;
 
     public WatchlistRepository(Dao<WatchListMovieEntity, Long> dao) {
         this.dao = dao;
+    }
+
+    public static WatchlistRepository getInstance(Dao<WatchListMovieEntity, Long> dao) {
+        if (instance == null) {
+            instance = new WatchlistRepository(dao);
+        }
+        return instance;
     }
 
     @Override
@@ -41,7 +49,6 @@ public class WatchlistRepository implements Observable {
         }
     }
 
-
     public List<WatchListMovieEntity> getWatchlist() {
         try {
             return dao.queryForAll();
@@ -51,9 +58,8 @@ public class WatchlistRepository implements Observable {
         }
     }
 
-
     public int addToWatchlist(WatchListMovieEntity movie) throws DuplicateMovieException, DatabaseOperationException {
-        try{
+        try {
             if (isOnWatchList(movie.getApiId())) {
                 notifyObservers("Film ist bereits auf der Watchlist.");
                 throw new DuplicateMovieException("Movie already exists in the watchlist: " + movie.getApiId());
@@ -66,29 +72,26 @@ public class WatchlistRepository implements Observable {
         }
     }
 
-
     public int removeFromWatchlist(String apiId) {
-        try{
+        try {
             List<WatchListMovieEntity> movies = dao.queryForEq("apiId", apiId);
 
-        if (movies.isEmpty()) {
-            notifyObservers("Film war nicht auf der Watchlist.");
-            throw new MovieNotFoundException("No movie found with apiId: " + apiId);
-        }
+            if (movies.isEmpty()) {
+                notifyObservers("Film war nicht auf der Watchlist.");
+                throw new MovieNotFoundException("No movie found with apiId: " + apiId);
+            }
 
-        int deleted = 0;
-        for (WatchListMovieEntity movie : movies) {
-            deleted += dao.delete(movie);
-        }
-        notifyObservers("Film von der Watchlist entfernt.");
-        return deleted;
-    } catch (SQLException e) {
+            int deleted = 0;
+            for (WatchListMovieEntity movie : movies) {
+                deleted += dao.delete(movie);
+            }
+            notifyObservers("Film von der Watchlist entfernt.");
+            return deleted;
+        } catch (SQLException e) {
             ExceptionUtility.logError("Database Error while removing movie from watchlist", e);
             throw new DatabaseOperationException("Database error while removing movie from watchlist");
         }
     }
-
-
 
     public boolean isOnWatchList(String apiId) {
         try {
@@ -102,6 +105,4 @@ public class WatchlistRepository implements Observable {
             throw new DatabaseOperationException("Database error while checking watchlist");
         }
     }
-
-
 }

@@ -78,8 +78,8 @@ public class HomeController implements Initializable, Observer {
 
     public void initializeInfrastructure() {
         databaseManager = FhmdbApplication.databaseManager;
-        movieRepository = new MovieRepository(databaseManager.getMovieDao());
-        watchlistRepository = new WatchlistRepository(databaseManager.getWatchlistDao());
+        movieRepository = MovieRepository.getInstance(databaseManager.getMovieDao());
+        watchlistRepository = WatchlistRepository.getInstance(databaseManager.getWatchlistDao());
     }
 
     public void initializeState() {

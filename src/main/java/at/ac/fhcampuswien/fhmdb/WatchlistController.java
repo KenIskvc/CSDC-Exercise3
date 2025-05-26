@@ -35,6 +35,10 @@ public class WatchlistController implements Observer {
     private WatchlistRepository watchlistRepository;
     protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
+    public WatchlistController() {
+        // No initialization needed
+    }
+
     @FXML
     public void initialize() {
         databaseManager = FhmdbApplication.databaseManager;
