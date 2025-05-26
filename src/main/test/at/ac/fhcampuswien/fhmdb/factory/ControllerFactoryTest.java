@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.factory;
 
 import at.ac.fhcampuswien.fhmdb.AboutController;
-import at.ac.fhcampuswien.fhmdb.factory.ControllerFactory;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
