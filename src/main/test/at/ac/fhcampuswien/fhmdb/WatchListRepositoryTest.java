@@ -38,7 +38,9 @@ class WatchlistRepositoryTest {
 
     @Test
     void testRetrieveAndAddToWatchlist() throws SQLException, DuplicateMovieException, MovieNotFoundException {
-        watchlistRepo.removeFromWatchlist("apiTest123");
+        if(watchlistRepo.isOnWatchList("apiTest123")) {
+            watchlistRepo.removeFromWatchlist("apiTest123");
+        };
         WatchListMovieEntity movie = new WatchListMovieEntity("apiTest123");
         int result = watchlistRepo.addToWatchlist(movie);
 

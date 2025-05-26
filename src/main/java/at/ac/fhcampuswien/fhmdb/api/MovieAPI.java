@@ -13,7 +13,6 @@ import java.util.UUID;
 public class MovieAPI {
     private static final OkHttpClient client = new OkHttpClient();
 
-
     public static List<Movie> getAllMovies() {
         return getAllMovies(null, null, null, null);
     }
